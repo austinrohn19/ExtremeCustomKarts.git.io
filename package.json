@@ -1,14 +1,12 @@
 {
-  "name": "extremecustomkarts.git.io",
+  "name": "extreme-custom-karts",
   "version": "1.0.0",
   "description": "full stack Emcomerce Site for Extreme Custom Karts",
   "main": "Server.js",
   "scripts": {
-    "test": "Npm Start"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/austinrohn19/ExtremeCustomKarts.git.io.git"
+    "start": "node backend/server.js",
+    "dev": "SET NODE_ENV=DEVELOPMENT& nodemon backend/server",
+    "prod": "SET NODE_ENV=PRODUCTION& nodemon backend/server"
   },
   "author": "Austin Rohn",
   "license": "ISC",
@@ -20,5 +18,8 @@
     "dotenv": "^10.0.0",
     "express": "^4.17.1",
     "mongoose": "^6.0.12"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.14"
   }
 }
