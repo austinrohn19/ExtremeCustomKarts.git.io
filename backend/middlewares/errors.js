@@ -14,13 +14,25 @@ module.exports = (err, req, res, next) => {
     }
 
     if (process.env.NODE_ENV === 'PRODUCTION') {
-        let error = {...err}
+        let error = {...err }
 
-        error.message = err.message
+        error.message = err.message;
+
+        //Wrong Mongoose Object ID Error
+        if (err.name === "CastError") {
+            const message = `Resource not found. Invalid: ${err.path}`
+            error = new ErrorHandler(message, 400)
+        }
+
+        //handling the Mongoose validation Error
+        if(err.name === "validationError") {
+            const message = object.values(err.errors).map(value => value.message);
+            error = new ErrorHandler(message, 400)
+        }
 
         res.status(err.statusCode).json({
             success: false,
-            message: err.message || 'Internal Server Error',
+            message: error.message || 'Internal Server Error',
         })
     }
 }
