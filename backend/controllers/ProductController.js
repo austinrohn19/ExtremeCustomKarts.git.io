@@ -1,8 +1,9 @@
 const Product = require('../models/product')
 const ErrorHandler = require('../utils/errorHandler')
+const catchAsyncErrors = require('../middlewares/catchAsyncErrors')
 
 //create a new product that goes to /api/v1/admin/product/new
-exports.newProduct = async (req, res, next) => {
+exports.newProduct = catchAsyncErrors (async (req, res, next) => {
     //this is the create function that creates the body to create the product tag.
     const product = await Product.create(req.body);
 
@@ -10,7 +11,7 @@ exports.newProduct = async (req, res, next) => {
         success: true,
         product
     })
-}
+})
 
 
 // get all products => /api/v1/product
