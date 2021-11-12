@@ -15,7 +15,7 @@ exports.newProduct = catchAsyncErrors (async (req, res, next) => {
 
 
 // get all products => /api/v1/product
-exports.getProducts = async (req, res, next) => {
+exports.getProducts = catchAsyncErrors (async (req, res, next) => {
 
     const products = await Product.find();
 
@@ -24,10 +24,10 @@ exports.getProducts = async (req, res, next) => {
         count: products.length,
         products 
     })   
-}
+})
 
 //get a single Product => /api/v1/product/:id
-exports.getsingleProduct = async (req, res, next) => {
+exports.getsingleProduct = catchAsyncErrors (async (req, res, next) => {
 
     const product = await Product.findById(req.params.id);
 
@@ -41,11 +41,11 @@ exports.getsingleProduct = async (req, res, next) => {
         success: true,
         product
     })
-}
+})
 
 //update the products => /api/v1/admin/product/:id
 
-exports.updateProduct = async (req, res, next) => {
+exports.updateProduct = catchAsyncErrors (async (req, res, next) => {
 
     //we change this to let because it will then let us reassign it.
     let product = await Product.findById(req.params.id);
@@ -68,10 +68,10 @@ exports.updateProduct = async (req, res, next) => {
         product
     })
 
-}
+})
 
 // delete prodcuts => /api/v1/admin/product/:id
-exports.deleteProduct = async (req, res, next) => {
+exports.deleteProduct = catchAsyncErrors (async (req, res, next) => {
 
     const product = await Product.findById(req.params.id);
 
@@ -88,4 +88,4 @@ exports.deleteProduct = async (req, res, next) => {
         sucess: true,
         message: " your product has been deleted."
     })
-}
+})
