@@ -1,6 +1,7 @@
 const Product = require('../models/product')
 const ErrorHandler = require('../utils/errorHandler')
 const catchAsyncErrors = require('../middlewares/catchAsyncErrors')
+const APIFeatures = require('../utils/apiFeatures')
 
 //create a new product that goes to /api/v1/admin/product/new
 exports.newProduct = catchAsyncErrors (async (req, res, next) => {
@@ -14,14 +15,25 @@ exports.newProduct = catchAsyncErrors (async (req, res, next) => {
 })
 
 
-// get all products => /api/v1/product
+// get all products => /api/v1/product?keyword=cart
 exports.getProducts = catchAsyncErrors (async (req, res, next) => {
 
-    const products = await Product.find();
+    //how many results I want to display per page
+    const resPerPage = 4; 
+    const productCount= await Product.countDocuments();
+
+    //req.query = req.queryStr= req.query, and the req.queryStr is already calling by keyword.
+    const apiFeatures = new APIFeatures(Product.find(), req.query)
+          .search()
+          .filter()
+          .pagination(resPerPage)
+
+    const products = await apiFeatures.query;
 
     res.status(200).json({
         sucess: true,
         count: products.length,
+        productCount,
         products 
     })   
 })
