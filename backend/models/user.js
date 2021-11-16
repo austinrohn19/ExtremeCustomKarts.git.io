@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const validator= require('validator');
+const bcrypt = require('bcryptjs');
 
 const userSchema = new mongoose.Schema({
     //user name is being created
@@ -48,5 +49,16 @@ const userSchema = new mongoose.Schema({
     resetPasswrodExpire:Date
 })
 
+// Encrypting password before saving user.
+// make sure this has the function here not error function because then we cant use the keyword isModified.
+userSchema.pre('save', async function (next) {
+    //this means make sure the password is changed if it needed to be changed
+    if(!this.isModified('password')) {
+        next()
+    }
+
+    //10 is the salt value of the pawword or pretty much the strength of the password, 10 is recommended. can go higher.
+    this.password= await bcrypt.hash(this.password, 10)
+})
 
 module.exports = mongoose.model('User',userSchema);
