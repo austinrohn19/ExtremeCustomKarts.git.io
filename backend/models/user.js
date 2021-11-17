@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 const validator= require('validator');
 const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
 
 const userSchema = new mongoose.Schema({
     //user name is being created
@@ -60,5 +61,12 @@ userSchema.pre('save', async function (next) {
     //10 is the salt value of the pawword or pretty much the strength of the password, 10 is recommended. can go higher.
     this.password= await bcrypt.hash(this.password, 10)
 })
+
+//return JSON web Token
+userSchema.methods.getJwtToken = function () {
+    return jwt.sign({id: this._id}, process.env.JWT_SECRET, {
+        expiresIn: process.env.JWT_EXPIRES_TIME
+    });
+}
 
 module.exports = mongoose.model('User',userSchema);
