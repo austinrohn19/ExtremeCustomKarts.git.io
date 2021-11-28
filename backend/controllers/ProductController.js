@@ -5,6 +5,10 @@ const APIFeatures = require('../utils/apiFeatures')
 
 //create a new product that goes to /api/v1/admin/product/new
 exports.newProduct = catchAsyncErrors (async (req, res, next) => {
+
+    //this is getting the id of the currently logged in user
+    req.body.user = req.user.id;
+    
     //this is the create function that creates the body to create the product tag.
     const product = await Product.create(req.body);
 
