@@ -3,6 +3,7 @@ const User = require('../models/user');
 const ErrorHandler = require('../utils/errorHandler')
 const catchAsyncErrors = require('../middlewares/catchAsyncErrors');
 const sendToken = require('../utils/jwtToken');
+const sendEmail = require('../utils/sendEmail');
 
 //register a user => /api/v1/register
 exports.registerUser = catchAsyncErrors (async (req, res, next) => {
@@ -49,6 +50,52 @@ exports.loginUser = catchAsyncErrors(async (req, res, next) => {
     sendToken(user, 200, res)
 })
 
+//Forgot Password => /api/v1/forgot
+exports.forgotPassword = catchAsyncErrors (async (req, res, next) => {
+
+    const user = await User.findOne({email: req.body.email});
+
+    if (!user) {
+        return next(new ErrorHandler('user not found with this email address.',404));
+    }
+
+    //get reset Token
+
+    const resetToken = user.getResetPasswordToken();
+
+    await user.save({  validateBeforeSave: false })
+
+    //create reset password URL
+     const resetUrl = `${req.protocol}://${req.get('host')}/api/v1/password/reset/${resetToken}`;
+
+    //message int he email for the user to get.
+     const message = `To reset your password, please press on the link that follow:\n\n${resetUrl}\n\nIf you have not requested this Email, then please ignore this email.`
+
+     try{
+         //this is to send the email
+        await sendEmail({
+            email: user.email,
+            subject: 'Extreme Custom Karts Password Recovery',
+            message
+        })
+
+        res.status(200).json({
+            success: true,
+            message: `Email sent to: ${user.email}`
+        })
+     }
+         catch (error){
+             user.resetPasswordToken = undefined;
+             user.resetPasswordExpire = undefined;
+
+             await user.save({validateBeforeSave: false});
+
+             return next(new ErrorHandler(error.message,500))
+ 
+         }
+})
+
+
 
 //logout user => /api/v1/logout
 
@@ -60,7 +107,7 @@ exports.logout = catchAsyncErrors(async (req, res, next) => {
 
     res.status(200).json({
         Success: true,
-        message: 'You have Successfully Logged out, Please come and browers again!'
+        message: 'You have Successfully Logged out, Please come again!'
     })
     
 })
