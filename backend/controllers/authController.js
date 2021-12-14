@@ -7,6 +7,7 @@ const sendEmail = require('../utils/sendEmail');
 
 const crypto = require('crypto');
 const { send } = require('process');
+const { restart } = require('nodemon');
 
 //register a user => /api/v1/register
 exports.registerUser = catchAsyncErrors (async (req, res, next) => {
@@ -173,7 +174,7 @@ exports.updateProfile = catchAsyncErrors (async (req, res, next) => {
         runValidators: true,
         useFindAndModify: false
     })
-    
+
     res.status(200).json({
         success: true
     })
@@ -192,4 +193,31 @@ exports.logout = catchAsyncErrors(async (req, res, next) => {
         message: 'You have Successfully Logged out, Please come again!'
     })
     
+})
+
+//Admin Routes
+
+//Get all users => /api/v1/admin/users
+exports.allUsers = catchAsyncErrors (async (req, res, next) => {
+    const users = await User.find();
+
+    res.status(200).json({
+        success: true,
+        users
+    })
+})
+
+//get user details => /api/v1/admin/user/:_id
+exports.getUserDetails = catchAsyncErrors (async (req, res, next) => {
+
+    const user = await User.findById(req.params.id);
+
+    if(!user){
+        return next(new ErrorHandler(`User not found with id: ${req.params.id}`));
+    }
+
+    res.status(200).json({
+        success: true,
+        user
+    })
 })
