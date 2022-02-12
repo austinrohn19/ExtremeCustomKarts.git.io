@@ -85,7 +85,8 @@ exports.updateOrders = catchAsyncErrors (async (req, res, next) => {
     }
 
     order.orderItems.forEach(async item => {
-        await updateStock(item.product, console.log, item.quantity)
+
+        await updateStock(item.Product, item.quantity)
         
     })
 
