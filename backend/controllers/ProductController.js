@@ -39,7 +39,7 @@ exports.getProducts = catchAsyncErrors (async (req, res, next) => {
         count: products.length,
         productCount,
         products 
-    })   
+    })    
 })
 
 //get a single Product => /api/v1/product/:id
@@ -105,3 +105,4 @@ exports.deleteProduct = catchAsyncErrors (async (req, res, next) => {
         message: " your product has been deleted."
     })
 })
+
