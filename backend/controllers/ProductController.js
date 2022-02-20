@@ -165,6 +165,8 @@ exports.deleteProductReview = catchAsyncErrors (async (req, res, next) => {
     const product = await Product.findById(req.query.productId);
 
     const reviews = product.reviews.filter(review => review._id.toString() !== req.query.id.toString());
+   
+    console.log(reviews);
 
     const numOfReviews = reviews.length;
 
