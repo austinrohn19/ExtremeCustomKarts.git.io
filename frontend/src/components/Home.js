@@ -1,40 +1,43 @@
-import React, { Fragment } from 'react'
+import React, { Fragment, useEffect } from 'react'
 
 import MetaData from './layout/MetaData'
+import Product from './product/Product'
+import Loader from './layout/Loader'
+
+import { useDispatch, useSelector } from 'react-redux'
+import { getProducts } from '../actions/productActions'
 
 const Home = () => {
-    return (
-        <div class= "container container-fluid">
-            <MetaData title={'Best Custom Carts Online!!'} />
-            <h1 id="products_heading">Latest Products</h1>
 
-            <section id="products" class="container mt-5">
-                <div class="row">
-                    <div class="col-sm-12 col-md-6 col-lg-3 my-3">
-                        <div class="card p-3 rounded">
-                            <img
-                                class="card-img-top mx-auto"
-                                src="./images/Test_Cart.png" alt="test Cart"
-                            />
-                            <div class="card-body d-flex flex-column">
-                                <h5 class="card-title">
-                                    <a href="">Custom Golf Cart</a>
-                                </h5>
-                                <div class="ratings mt-auto">
-                                    <i class="fa fa-star"></i>
-                                    <i class="fa fa-star"></i>
-                                    <i class="fa fa-star"></i>
-                                    <i class="fa fa-star-half-o"></i>
-                                    <i class="fa fa-star-o"></i>
-                                    <span id="no_of_reviews">(5 Reviews)</span>
-                                </div>
-                                <p class="card-text">$4000.00</p>
-                                <a href="#" id="view_btn" class="btn btn-block">View Details</a>
+    const dispatch = useDispatch();
+
+    const { loading, products, error, productsCount } = useSelector(state => state.products)
+
+    // first thing that will run when everything gets imported this is like a constructor of a class.
+    useEffect(() => {
+        dispatch(getProducts());
+    }, [dispatch])
+
+    return (
+        <div class="container container-fluid">
+            <Fragment>
+                { loading? <Loader/> : (
+                    <Fragment>
+                        <MetaData title={'Best Custom Carts Online!!'} />
+
+                        <h1 id="products_heading">Latest Products</h1>
+
+                        <section id="products" class="container mt-5">
+                            <div class="row">
+                                {products && products.map(product => (
+                                    <Product key={product._id} product={product} />
+                                ))}
                             </div>
-                        </div>
-                    </div>
-                </div>
-            </section>
+                        </section>
+                    </Fragment>
+                )}
+
+            </Fragment>
         </div>
     )
 }

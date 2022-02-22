@@ -1,7 +1,7 @@
 [
     {
         "name": "Test Cart",
-        "Price": "1000.00",
+        "price": "1000.00",
         "description": "super cool cart",
         "ratings": 5.0,
         "images": [
@@ -18,7 +18,7 @@
     },
     {
         "name": "Test Cart",
-        "Price": "1000.00",
+        "price": "1000.00",
         "description": "super cool cart",
         "ratings": 5.0,
         "images": [
@@ -35,7 +35,7 @@
     },
     {
         "name": "Test Cart",
-        "Price": "1000.00",
+        "price": "1000.00",
         "description": "super cool cart",
         "ratings": 5.0,
         "images": [
