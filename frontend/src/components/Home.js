@@ -5,9 +5,13 @@ import Product from './product/Product'
 import Loader from './layout/Loader'
 
 import { useDispatch, useSelector } from 'react-redux'
+import {useAlert} from 'react-alert'
 import { getProducts } from '../actions/productActions'
 
+
 const Home = () => {
+
+    const alert = useAlert();
 
     const dispatch = useDispatch();
 
@@ -15,8 +19,14 @@ const Home = () => {
 
     // first thing that will run when everything gets imported this is like a constructor of a class.
     useEffect(() => {
+
+        if(error) {
+            return alert.error(error)
+        }
+
         dispatch(getProducts());
-    }, [dispatch])
+
+    }, [dispatch, error, alert])
 
     return (
         <div class="container container-fluid">
