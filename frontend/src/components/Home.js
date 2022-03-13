@@ -10,7 +10,7 @@ import { useAlert } from 'react-alert'
 import { getProducts } from '../actions/productActions'
 
 
-const Home = () => {
+const Home = ({ match}) => {
 
     const [currentPage, setCurrentPage] = useState(1)
 
@@ -20,6 +20,8 @@ const Home = () => {
 
     const { loading, products, error, productsCount, resPerPage } = useSelector(state => state.products)
 
+    const keyword = match.params.keyword
+
     // first thing that will run when everything gets imported this is like a constructor of a class.
     useEffect(() => {
 
@@ -27,9 +29,9 @@ const Home = () => {
             return alert.error(error)
         }
 
-        dispatch(getProducts(currentPage));
+        dispatch(getProducts(keyword, currentPage));
 
-    }, [dispatch, error, alert, currentPage])
+    }, [dispatch, error, alert, currentPage, keyword])
 
     function setCurrentPageNo(pageNumber) {
         setCurrentPage(pageNumber)

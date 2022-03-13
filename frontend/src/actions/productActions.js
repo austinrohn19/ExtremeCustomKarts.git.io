@@ -9,12 +9,12 @@ import { ALL_PRODUCTS_FAILED,
      CLEAR_ERRORS } from '../constants/productConstants'
 
 //this is the function to call all of the Products
-export const getProducts = (currentPage = 1) => async(dispatch) => {
+export const getProducts = (keyword = '', currentPage = 1) => async(dispatch) => {
     try {
         //each dispatch is step by step what the function should take.
         dispatch({ type: ALL_PRODUCTS_REQUEST})
 
-        const { data } = await axios.get(`/api/v1/products?page=${currentPage}`)
+        const { data } = await axios.get(`/api/v1/products?keyword=${keyword}&page=${currentPage}`)
 
         dispatch({ 
             type: ALL_PRODUCTS_SUCCESS,
