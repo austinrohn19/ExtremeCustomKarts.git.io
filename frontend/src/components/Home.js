@@ -8,9 +8,11 @@ import Loader from './layout/Loader'
 import { useDispatch, useSelector } from 'react-redux'
 import { useAlert } from 'react-alert'
 import { getProducts } from '../actions/productActions'
+import {useParams} from 'react-router-dom'
 
 
-const Home = ({ match}) => {
+const Home = () => {
+    const params = useParams();
 
     const [currentPage, setCurrentPage] = useState(1)
 
@@ -20,7 +22,7 @@ const Home = ({ match}) => {
 
     const { loading, products, error, productsCount, resPerPage } = useSelector(state => state.products)
 
-    const keyword = match.params.keyword
+    const keyword =params.keyword
 
     // first thing that will run when everything gets imported this is like a constructor of a class.
     useEffect(() => {
