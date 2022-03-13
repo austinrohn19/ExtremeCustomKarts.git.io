@@ -1,4 +1,5 @@
 import React, { Fragment, useEffect } from 'react'
+import { Carousel } from 'react-bootstrap'
 
 import Loader from '../layout/Loader'
 
@@ -7,6 +8,7 @@ import { useAlert } from 'react-alert'
 import { useDispatch, useSelector } from 'react-redux'
 import { getProductDetails, clearErrors } from '../../actions/productActions'
 import { useParams } from 'react-router-dom'
+import MetaData from '../layout/MetaData'
 
 const ProductDetails = ({ match }) => {
 
@@ -16,38 +18,45 @@ const ProductDetails = ({ match }) => {
 
     const { loading, error, product } = useSelector(state => state.productDetails)
     useEffect(() => {
-        dispatch(getProductDetails(match.params.id))
+        dispatch(getProductDetails(params.id))
 
         if (error) {
             alert.error(error);
             dispatch(clearErrors())
         }
 
-    }, [dispatch, alert, error, match.params.id])
+    }, [dispatch, alert, error, match, params.id])
 
     return (
         <Fragment>
             {loading ? <Loader /> : (
                 <Fragment>
+                    <MetaData title = {product.name} />
                     <div class="row f-flex justify-content-around">
                         <div class="col-12 col-lg-5 img-fluid" id="product_image">
-                            <img src="https://i5.walmartimages.com/asr/1223a935-2a61-480a-95a1-21904ff8986c_1.17fa3d7870e3d9b1248da7b1144787f5.jpeg?odnWidth=undefined&odnHeight=undefined&odnBg=ffffff" alt="sdf" height="500" width="500" />
+                            <Carousel pause='hover'>
+                                {product.images && product.images.map(image => (
+                            <Carousel.Item key={image.public_id}>
+                                <img class="d-block w-100"  src={image.url} alt={product.title} />
+                            </Carousel.Item>
+                                ))}
+                            </Carousel>
                         </div>
 
                         <div class="col-12 col-lg-5 mt-5">
                             <h3>{product.name}</h3>
-                            <p id="product_id">Product # sklfjdk35fsdf5090</p>
+                            <p id="product_id">Product # {product._id} </p>
 
                             <hr />
 
                             <div class="rating-outer">
-                                <div class="rating-inner"></div>
+                                <div class="rating-inner" style={{ width:`${(product.ratings / 5) * 100}%` }}></div>
                             </div>
-                            <span id="no_of_reviews">(5 Reviews)</span>
+                            <span id="no_of_reviews">({product.numofReviews} Reviews)</span>
 
                             <hr />
 
-                            <p id="product_price">$108.00</p>
+                            <p id="product_price">${product.price}</p>
                             <div class="stockCounter d-inline">
                                 <span class="btn btn-danger minus">-</span>
 
@@ -59,14 +68,14 @@ const ProductDetails = ({ match }) => {
 
                             <hr />
 
-                            <p>Status: <span id="stock_status">In Stock</span></p>
+                            <p>Status: <span id="stock_status" class={product.stock > 0 ? 'greenColor' : 'redColor'}>{product.stock > 0 ? 'In Stock' : 'Out of Stock'}</span></p>
 
                             <hr />
 
                             <h4 class="mt-2">Description:</h4>
-                            <p>Binge on movies and TV episodes, news, sports, music and more! We insisted on 720p High Definition for this 32" LED TV, bringing out more lifelike color, texture and detail. We also partnered with Roku to bring you the best possible content with thousands of channels to choose from, conveniently presented through your own custom home screen.</p>
+                            <p>{product.description}</p>
                             <hr />
-                            <p id="product_seller mb-3">Sold by: <strong>Amazon</strong></p>
+                            <p id="product_seller mb-3">Sold by: <strong></strong></p>
 
                             <button id="review_btn" type="button" class="btn btn-primary mt-4" data-toggle="modal" data-target="#ratingModal">
                                 Submit Your Review
