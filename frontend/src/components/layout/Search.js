@@ -7,7 +7,7 @@ const Search = ({history}) => {
     const navigate = useNavigate();
 
     const searchHandler = (e) => {
-        e.preventDeafults()
+        e.preventDefault();
 
         if(keyword.trim()){
             navigate(`/search/${keyword}`)

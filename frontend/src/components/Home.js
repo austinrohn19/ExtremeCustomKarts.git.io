@@ -1,5 +1,7 @@
 import React, { Fragment, useState, useEffect } from 'react'
 import Pagination from 'react-js-pagination'
+import Slider from 'rc-slider'
+import 'rc-slider/assets/index.css';
 
 import MetaData from './layout/MetaData'
 import Product from './product/Product'
@@ -8,13 +10,17 @@ import Loader from './layout/Loader'
 import { useDispatch, useSelector } from 'react-redux'
 import { useAlert } from 'react-alert'
 import { getProducts } from '../actions/productActions'
-import {useParams} from 'react-router-dom'
+import { useParams } from 'react-router-dom'
 
+const { createSliderWithTooltip } = Slider;
+const Range = createSliderWithTooltip(Slider.Range)
 
 const Home = () => {
     const params = useParams();
 
     const [currentPage, setCurrentPage] = useState(1)
+    //this is the max and min range for the price filter, base this off of average price of customers goods.
+    const [price, setPrice] = useState([1, 25000])
 
     const alert = useAlert();
 
@@ -22,7 +28,7 @@ const Home = () => {
 
     const { loading, products, error, productsCount, resPerPage } = useSelector(state => state.products)
 
-    const keyword =params.keyword
+    const keyword = params.keyword
 
     // first thing that will run when everything gets imported this is like a constructor of a class.
     useEffect(() => {
@@ -31,14 +37,14 @@ const Home = () => {
             return alert.error(error)
         }
 
-        dispatch(getProducts(keyword, currentPage));
+        dispatch(getProducts(keyword, currentPage, price));
 
-    }, [dispatch, error, alert, currentPage, keyword])
+    }, [dispatch, error, alert, currentPage, keyword, price])
 
     function setCurrentPageNo(pageNumber) {
         setCurrentPage(pageNumber)
     }
-//pagination and the list of propetties after it are for switching between pages.
+    //pagination and the list of propetties after it are for switching between pages.
     return (
         <div class="container container-fluid">
             <Fragment>
@@ -50,9 +56,44 @@ const Home = () => {
 
                         <section id="products" class="container mt-5">
                             <div class="row">
-                                {products && products.map(product => (
-                                    <Product key={product._id} product={product} />
-                                ))}
+
+                                {keyword ? (
+                                    <Fragment>
+                                        <div class="col-6 col-md-3 mt-5 mb-5">
+                                            <div class="px-5">
+                                                <Range
+                                                    marks={{
+                                                        1: `$1`,
+                                                        25000: `$25000`
+                                                    }}
+                                                    min={1}
+                                                    max={25000}
+                                                    defaultValue={[1, 25000]}
+                                                    tipFormatter={value => `$${value}`}
+                                                    tipProps={{
+                                                        placement: 'bottom',
+                                                        visible: true
+                                                    }}
+                                                    value={price}
+                                                    onChange={price => setPrice(price)}
+                                                />
+                                            </div>
+                                        </div>
+
+                                        <div class="col-6 col-md-9">
+                                            <div class="row">
+                                                {products && products.map(product => (
+                                                    <Product key={product._id} product={product} col={4} />
+                                                ))}
+                                            </div>
+                                        </div>
+                                    </Fragment>
+
+                                ) : (
+                                    products && products.map(product => (
+                                        <Product key={product._id} product={product} col={3} />
+                                    ))
+                                )}
                             </div>
                         </section>
                         {resPerPage <= productsCount && (
