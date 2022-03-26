@@ -21,6 +21,18 @@ const Home = () => {
     const [currentPage, setCurrentPage] = useState(1)
     //this is the max and min range for the price filter, base this off of average price of customers goods.
     const [price, setPrice] = useState([1, 25000])
+    const [category, setCategory] = useState('')
+    //filter by rating
+    const [rating, setRating] = useState(0)
+
+    //if you add a category to the front end you must add here to
+    const categories = [
+        'Carts',
+        'Spare parts',
+        'Accesories',
+        'Custom Parts',
+        'Color'
+    ]
 
     const alert = useAlert();
 
@@ -37,13 +49,14 @@ const Home = () => {
             return alert.error(error)
         }
 
-        dispatch(getProducts(keyword, currentPage, price));
+        dispatch(getProducts(keyword, currentPage, price, category, rating));
 
-    }, [dispatch, error, alert, currentPage, keyword, price])
+    }, [dispatch, error, alert, currentPage, keyword, price, category, rating]);
 
     function setCurrentPageNo(pageNumber) {
         setCurrentPage(pageNumber)
     }
+
     //pagination and the list of propetties after it are for switching between pages.
     return (
         <div class="container container-fluid">
@@ -77,9 +90,65 @@ const Home = () => {
                                                     value={price}
                                                     onChange={price => setPrice(price)}
                                                 />
+
+                                                <hr class="my-5" />
+
+                                                <div class="mt-5">
+                                                    <h4 class="mb-3">
+                                                        Categories
+                                                    </h4>
+
+                                                    <ul class="pl-0">
+                                                        {categories.map(category =>
+                                                            <li
+                                                                style={{
+                                                                    cursor: 'pointer',
+                                                                    listStyleType: 'none'
+                                                                }}
+                                                                key={category}
+                                                                onClick={() => setCategory(category)}
+                                                            >
+                                                                {category}
+
+                                                            </li>
+                                                        )}
+
+                                                    </ul>
+                                                </div>
+                                                <hr class="my-3" />
+
+                                                <div class="mt-5">
+                                                    <h4 class="mb-3">
+                                                        Ratings
+                                                    </h4>
+
+                                                    <ul class="pl-0">
+                                                        {[5 ,4, 3, 2, 1].map(star =>
+                                                            <li
+                                                                style={{
+                                                                    cursor: 'pointer',
+                                                                    listStyleType: 'none'
+                                                                }}
+                                                                key={star}
+                                                                onClick={() => setRating(star)}
+                                                            >
+                                                                <div class= "rating-outer">
+                                                                    <div class = "rating-inner"
+                                                                        style={{
+                                                                            width: `${star * 20}%`
+                                                                        }}
+                                                                    >
+
+                                                                    </div>
+                                                                </div>
+
+                                                            </li>
+                                                        )}
+
+                                                    </ul>
+                                                </div>
                                             </div>
                                         </div>
-
                                         <div class="col-6 col-md-9">
                                             <div class="row">
                                                 {products && products.map(product => (
