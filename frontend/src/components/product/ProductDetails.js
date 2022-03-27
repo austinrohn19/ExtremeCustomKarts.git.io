@@ -2,13 +2,13 @@ import React, { Fragment, useEffect } from 'react'
 import { Carousel } from 'react-bootstrap'
 
 import Loader from '../layout/Loader'
-
+import MetaData from '../layout/MetaData'
 
 import { useAlert } from 'react-alert'
 import { useDispatch, useSelector } from 'react-redux'
 import { getProductDetails, clearErrors } from '../../actions/productActions'
 import { useParams } from 'react-router-dom'
-import MetaData from '../layout/MetaData'
+
 
 const ProductDetails = ({ match }) => {
 
