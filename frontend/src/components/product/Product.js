@@ -7,7 +7,7 @@ const Product = ({ product, col }) => {
                 <div class="card p-3 rounded">
                     <img
                         class="card-img-top mx-auto"
-                        src="./images/Test_Cart.png" alt="test Cart"
+                        src={product.images[0].url} alt="test Cart"
                     />
                     <div class="card-body d-flex flex-column">
                         <h5 class="card-title">

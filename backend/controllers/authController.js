@@ -8,9 +8,16 @@ const sendEmail = require('../utils/sendEmail');
 const crypto = require('crypto');
 const { send } = require('process');
 const { restart } = require('nodemon');
+const cloudinary = require('cloudinary');
 
 //register a user => /api/v1/register
 exports.registerUser = catchAsyncErrors (async (req, res, next) => {
+
+    const result = await cloudinary.v2.uploader.upload(req.body.avatar, {
+        folder: 'avatars',
+        width: 150,
+        crop: "scale"
+    })
 
     const { name, email, password }= req.body;
 
@@ -19,8 +26,8 @@ exports.registerUser = catchAsyncErrors (async (req, res, next) => {
         email,
         password,
         avatar: {
-            public_id: 'avatars/profile_pic_myqofd',
-            url: 'https://res.cloudinary.com/extreme-custom-carts/image/upload/v1637020695/avatars/profile_pic_myqofd.jpg'
+            public_id: result.public_id,
+            url: result.secure_url,
         }
     })
 
