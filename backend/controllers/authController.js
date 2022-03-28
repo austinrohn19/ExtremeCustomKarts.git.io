@@ -47,6 +47,8 @@ exports.loginUser = catchAsyncErrors(async (req, res, next) => {
     // we must use the .select method here because in the user model we have password set to select= false
     const user= await User.findOne({email}).select('+password')
 
+
+
     if (!user) {
         return next(new ErrorHandler('invalid Email, Please try again.',401));
     }

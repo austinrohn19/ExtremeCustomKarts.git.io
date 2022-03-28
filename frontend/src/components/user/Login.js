@@ -1,6 +1,5 @@
 import React, { Fragment, useState, useEffect } from 'react'
-import { Link, Navigate, useNavigate
-} from 'react-router-dom'
+import { Link, useNavigate} from 'react-router-dom'
 
 import Loader from '../layout/Loader'
 import MetaData from '../layout/MetaData'

@@ -7,6 +7,7 @@ import Home from './components/Home'
 import ProductDetails from './components/product/ProductDetails'
 
 import Login from './components/user/Login'
+import Register from './components/user/Register'
 
 function App() {
   return (
@@ -17,7 +18,9 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/search/:keyword" element={<Home />} />
           <Route path="/product/:id" element={<ProductDetails />} />
+
           <Route path="/login" element={<Login/>} />
+          <Route path="/register" element={<Register/>} />
         </Routes>
         <Footer />
       </div>
