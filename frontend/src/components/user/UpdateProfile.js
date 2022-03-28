@@ -84,7 +84,7 @@ const UpdateProfile = ({ history }) => {
                         <h1 class="mt-2 mb-5">Update Profile</h1>
 
                         <div class="form-group">
-                            <label htmlfor="email_field">Name</label>
+                            <label htmlFor="email_field">Name</label>
                             <input
                                 type="name"
                                 id="name_field"
@@ -96,7 +96,7 @@ const UpdateProfile = ({ history }) => {
                         </div>
 
                         <div class="form-group">
-                            <label  htmlfor="email_field">Email</label>
+                            <label  htmlFor="email_field">Email</label>
                             <input
                                 type="email"
                                 id="email_field"
@@ -108,7 +108,7 @@ const UpdateProfile = ({ history }) => {
                         </div>
 
                         <div class='form-group'>
-                            <label htmlfor='avatar_upload'>Avatar</label>
+                            <label htmlFor='avatar_upload'>Avatar</label>
                             <div class='d-flex align-items-center'>
                                 <div>
                                     <figure class='avatar mr-3 item-rtl'>
@@ -128,7 +128,7 @@ const UpdateProfile = ({ history }) => {
                                         accept='images/*'
                                         onChange={onChange}
                                     />
-                                    <label class='custom-file-label' htmlfor='customFile'>
+                                    <label class='custom-file-label' htmlFor='customFile'>
                                         Choose Avatar
                                     </label>
                                 </div>
