@@ -3,8 +3,10 @@ import { Link } from 'react-router-dom'
 
 import { useDispatch, useSelector } from 'react-redux'
 import { useAlert } from 'react-alert'
+import { logout } from '../../actions/userActions'
 
 import Search from './Search'
+
 
 import '../../App.css'
 
@@ -14,6 +16,11 @@ const Header = () => {
   const dispatch = useDispatch();
 
   const { user, loading } = useSelector(state => state.auth)
+
+  const logoutHandler = () => {
+    dispatch(logout());
+    alert.success('You have logged out successfully!')
+  }
 
   return (
     <Fragment>
@@ -58,9 +65,7 @@ const Header = () => {
                 <Link class="dropdown-item" to="/dashboard">Dashboard</Link>
               )}
               <Link class="dropdown-item" to="/me">Profile</Link>
-              <Link class="dropdown-item text-danger" to="/">
-                Logout               
-              </Link>
+              <Link class="dropdown-item text-danger" to="/" onClick={logoutHandler}>Logout</Link>
 
             </div>
 
