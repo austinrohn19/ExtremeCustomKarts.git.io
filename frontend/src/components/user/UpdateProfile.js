@@ -1,22 +1,16 @@
 import React, { Fragment, useState, useEffect } from 'react'
-import {useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 
 import MetaData from '../layout/MetaData'
 
 import { useAlert } from 'react-alert'
 import { useDispatch, useSelector } from 'react-redux'
-import { register, clearErrors } from '../../actions/userActions'
+import { updateProfile, loadUser, clearErrors } from '../../actions/userActions'
+import { UPDATE_PROFILE_RESET } from '../../constants/userConstants'
 
-const Register = ({ history }) => {
-
-    const [user, setUser] = useState({
-        name: '',
-        email: '',
-        password: '',
-    })
-
-    const { name, email, password } = user;
-
+const UpdateProfile = ({ history }) => {
+    const [name, setName] = useState('')
+    const [email, setEmail] = useState('')
     const [avatar, setAvatar] = useState('')
     const [avatarPreview, setAvatarPreview] = useState('/images/default_avatar.jpg')
 
@@ -24,12 +18,15 @@ const Register = ({ history }) => {
     const alert = useAlert();
     const dispatch = useDispatch();
 
-    const { isAuthenticated, error, loading } = useSelector(state => state.auth);
+    const { user } = useSelector(state => state.auth);
+    const { error, isUpdated, loading } = useSelector(state => state.user)
 
     useEffect(() => {
 
-        if (isAuthenticated) {
-            navigate('/')
+        if (user) {
+            setName(user.name);
+            setEmail(user.email);
+            setAvatarPreview(user.avatar.url);
         }
 
         if (error) {
@@ -37,7 +34,18 @@ const Register = ({ history }) => {
             dispatch(clearErrors());
         }
 
-    }, [dispatch, alert, isAuthenticated, error, navigate])
+        if (isUpdated) {
+            alert.success("your profile has been updated successfully")
+            dispatch(loadUser());
+
+            navigate('/me')
+
+            dispatch({
+                type: UPDATE_PROFILE_RESET
+            })
+        }
+
+    }, [dispatch, alert, error, navigate, user, isUpdated])
 
     const submitHandler = (e) => {
         e.preventDefault();
@@ -45,87 +53,69 @@ const Register = ({ history }) => {
         const formData = new FormData();
         formData.set('name', name);
         formData.set('email', email);
-        formData.set('password', password);
         formData.set('avatar', avatar);
 
-        dispatch(register(formData))
+        dispatch(updateProfile(formData))
     }
 
     const onChange = e => {
-        if(e.target.name === 'avatar') {
 
-            const reader = new FileReader();
+        const reader = new FileReader();
 
-            reader.onload = () => {
-                // this can be 0, 1, 2 0 means reader is created, 1 means processing, 2 means its all finished
-                if (reader.readyState === 2) {
-                    setAvatarPreview(reader.result)
-                    setAvatar(reader.result)
-                }
+        reader.onload = () => {
+            // this can be 0, 1, 2 0 means reader is created, 1 means processing, 2 means its all finished
+            if (reader.readyState === 2) {
+                setAvatarPreview(reader.result)
+                setAvatar(reader.result)
             }
-
-            reader.readAsDataURL(e.target.files[0])
-        }else {
-
-            setUser({ ...user, [e.target.name]: e.target.value })
-
         }
+
+        reader.readAsDataURL(e.target.files[0])
     }
-    
+
+
     return (
         <Fragment>
-
-            <MetaData title={'Register User'} />
+            <MetaData title={'Update User Profile'} />
 
             <div class="row wrapper">
                 <div class="col-10 col-lg-5">
                     <form class="shadow-lg" onSubmit={submitHandler} encType='multipart/form-data'>
-                        <h1 class="mb-3">Register</h1>
+                        <h1 class="mt-2 mb-5">Update Profile</h1>
 
                         <div class="form-group">
-                            <label htmlFor="email_field">Name</label>
-                            <input type="name"
+                            <label htmlfor="email_field">Name</label>
+                            <input
+                                type="name"
                                 id="name_field"
                                 class="form-control"
-                                name="name"
+                                name='name'
                                 value={name}
-                                onChange={onChange}
+                                onChange={(e) => setName(e.target.value)}
                             />
                         </div>
 
                         <div class="form-group">
-                            <label htmlFor="email_field">Email</label>
+                            <label  htmlfor="email_field">Email</label>
                             <input
                                 type="email"
                                 id="email_field"
                                 class="form-control"
-                                name="email"
+                                name='email'
                                 value={email}
-                                onChange={onChange}
-                            />
-                        </div>
-
-                        <div class="form-group">
-                            <label htmlFor="password_field">Password</label>
-                            <input
-                                type="password"
-                                id="password_field"
-                                class="form-control"
-                                name="password"
-                                value={password}
-                                onChange={onChange}
+                                onChange={(e) => setEmail(e.target.value)}
                             />
                         </div>
 
                         <div class='form-group'>
-                            <label htmlFor='avatar_upload'>Avatar</label>
+                            <label htmlfor='avatar_upload'>Avatar</label>
                             <div class='d-flex align-items-center'>
                                 <div>
                                     <figure class='avatar mr-3 item-rtl'>
                                         <img
                                             src={avatarPreview}
                                             class='rounded-circle'
-                                            alt='avatarPreview'
+                                            alt='Avatar Preview'
                                         />
                                     </figure>
                                 </div>
@@ -135,25 +125,17 @@ const Register = ({ history }) => {
                                         name='avatar'
                                         class='custom-file-input'
                                         id='customFile'
-                                        accept="images/*"
+                                        accept='images/*'
                                         onChange={onChange}
                                     />
-                                    <label class='custom-file-label' htmlFor='customFile'>
+                                    <label class='custom-file-label' htmlfor='customFile'>
                                         Choose Avatar
                                     </label>
                                 </div>
                             </div>
                         </div>
 
-                        <button
-                            id="register_button"
-                            type="submit"
-                            class="btn btn-block py-3"
-                            //disables the submit button if it is loading and after its done loading it will be able to be pressed
-                            disabled={loading ? true : false}
-                        >
-                            REGISTER
-                        </button>
+                        <button type="submit" class="btn update-btn btn-block mt-4 mb-3" disabled={loading ? true : false} >Update</button>
                     </form>
                 </div>
             </div>
@@ -161,4 +143,5 @@ const Register = ({ history }) => {
     )
 }
 
-export default Register
+
+export default UpdateProfile
