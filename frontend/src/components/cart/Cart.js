@@ -1,19 +1,22 @@
-import React, { Fragment, useState, useEffect } from 'react'
+import React, { Fragment } from 'react'
 import { Link } from 'react-router-dom'
 
 import MetaData from '../layout/MetaData'
 
-import { useAlert } from 'react-alert'
+
 import { useDispatch, useSelector } from 'react-redux'
-import { getProductDetails, clearErrors } from '../../actions/productActions'
-import { addItemToCart } from '../../actions/cartActions'
-import { useParams } from 'react-router-dom'
+import { addItemToCart, removeItemFromCart } from '../../actions/cartActions'
+
 
 const Cart = () => {
 
     const dispatch = useDispatch();
 
     const { cartItems } = useSelector(state => state.cart)
+
+    const removeCartItemHandler = (id) => {
+        dispatch(removeItemFromCart(id))
+    }
 
     const increaseQty = (id, quantity, stock) => {
         const newQty = quantity + 1;
@@ -41,10 +44,11 @@ const Cart = () => {
                             {cartItems.map(item => (
                                 <Fragment>
                                     <hr />
-                                    <div class="cart-item">
+
+                                    <div class="cart-item" key={item.product}>
                                         <div class="row">
                                             <div class="col-4 col-lg-3 ">
-                                                <img class="cart-image-top mx-auto" src={item.image} alt="Laptop" height="90" width="115" boarder-radius="1.5" />
+                                                <img class="cart-image-top mx-auto" src={item.image} alt="Laptop" height="90" width="115" />
                                             </div>
 
                                             <div class="col-5 col-lg-3">
@@ -66,7 +70,7 @@ const Cart = () => {
                                             </div>
 
                                             <div class="col-4 col-lg-1 mt-4 mt-lg-0">
-                                                <i id="delete_cart_item" class="fa fa-trash btn btn-danger"></i>
+                                                <i id="delete_cart_item" class="fa fa-trash btn btn-danger" onClick={() => removeCartItemHandler(item.product)}></i>
                                             </div>
 
                                         </div>
@@ -80,8 +84,8 @@ const Cart = () => {
                             <div id="order_summary">
                                 <h4>Order Summary</h4>
                                 <hr />
-                                <p>Subtotal:  <span class="order-summary-values">3 (Units)</span></p>
-                                <p>Est. total: <span class="order-summary-values">$765.56</span></p>
+                                <p>Subtotal:  <span class="order-summary-values">{cartItems.reduce((acc, item) => (acc + Number(item.quantity)),0)} (Units)</span></p>
+                                <p>Est. total: <span class="order-summary-values">${cartItems.reduce((acc, item) => acc + item.quantity * item.price, 0).toFixed(2)}</span></p>
 
                                 <hr />
                                 <button id="checkout_btn" class="btn btn-primary btn-block">Check out</button>
