@@ -26,6 +26,11 @@ body {
   border-radius: 5px;
 }
 
+.logo-image-top {
+  border: 1.5px solid black;
+  border-radius: 7.5px;
+}
+
 nav {
   background-color: #2b7592;
   padding: 1rem 1rem;
@@ -33,7 +38,7 @@ nav {
 
 #search_btn {
   background-color:#2b7592 ;
-  border: 2px solid;
+  border: 1.5px solid;
   border-color: black;
   border-radius: 2px;
 }
@@ -46,6 +51,7 @@ nav {
 #search_field {
   height: 2.4rem;
   padding: 1rem;
+  border: 1px solid black;
 }
 
 #login_btn,
@@ -67,6 +73,7 @@ nav {
   color: #2b7592;
   font-weight: bold;
   font-size: 0.9rem;
+  border: 1.5px solid black;
 }
 
 /* Home page */
@@ -76,6 +83,7 @@ nav {
 
 .card {
   height: 100%;
+  border: .5px solid grey;
 }
 
 .card-title a {
@@ -98,11 +106,14 @@ nav {
 #view_btn {
   background-color: #2b7592;
   color: black;
+  border: 1.5px solid black;
 }
 
 .card-img-top {
   width: 200px;
   height: 150px;
+  border: 1.5px solid grey;
+  border-radius:5px;
 }
 
 .ratings {
@@ -225,13 +236,20 @@ footer {
 
 /* Cart */
 
+.cart-image-top {
+  border: 1.5px solid black;
+  border-radius: 5px;
+}
+
 .cart-item {
   margin: 1.8rem 0rem;
   padding: 0rem 0.7rem;
 }
 
 .cart-item a {
-  color: grey;
+  color: black;
+  font-weight: bold;
+  font-size:1.2rem;
 }
 
 #delete_cart_item {
@@ -239,11 +257,11 @@ footer {
   background: white;
   padding: 0.3rem 0.5rem;
   font-size: 1.1rem;
-  border: none;
+  border: 1.5px solid black;
 }
 
 #card_item_price {
-  color: #febd69;
+  color: black;
   font-weight: bold;
   font-size: 1.4rem;
 }
@@ -251,7 +269,7 @@ footer {
 #checkout_btn,
 .review-btn {
   background-color: #fa9c23;
-  border-color: #fa9c23;
+  border: 2px solid black;
   margin-top: 2rem;
   border-radius: 5rem;
 }
@@ -281,6 +299,7 @@ footer {
 .plus,
 .minus {
   padding: 0.1rem 0.5rem;
+  border:1.5px solid black;
 }
 
 .stockCounter input::-webkit-outer-spin-button,
@@ -340,6 +359,7 @@ footer {
 
 .rounded-circle {
   border-radius: 50% !important;
+  border:1px solid black;
 }
 
 .btn.focus,

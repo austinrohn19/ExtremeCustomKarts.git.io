@@ -16,6 +16,7 @@ const Header = () => {
   const dispatch = useDispatch();
 
   const { user, loading } = useSelector(state => state.auth)
+  const { cartItems} = useSelector(state => state.cart)
 
   const logoutHandler = () => {
     dispatch(logout());
@@ -28,7 +29,7 @@ const Header = () => {
         <div class="col-12 col-md-3">
           <div class="navbar-brand">
             <Link to="/">
-              <img src="./images/Extreme_Custom_Carts.png" alt="logo" />
+              <img class="logo-image-top" src="./images/Extreme_Custom_Carts.png" alt="logo" />
             </Link>
           </div>
         </div>
@@ -38,7 +39,7 @@ const Header = () => {
         <div class="col-12 col-md-3 mt-4 mt-md-0 text-center">
           <Link to="/cart" style={{ textDecoration: 'none' }}>
             <span id="cart" class="ml-3">Cart</span>
-            <span class="ml-1" id="cart_count">2</span>
+            <span class="ml-1" id="cart_count">{cartItems.length}</span>
           </Link>
 
           {user ? (
