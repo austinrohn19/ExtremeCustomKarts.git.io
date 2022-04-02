@@ -59,6 +59,7 @@ nav {
   background-color: #f7f9fc;
   padding: 0.4rem 1.8rem;
   font-family: calibri;
+  border: 1.5px solid black;
 }
 
 #cart {
