@@ -7,7 +7,7 @@ const catchAsyncErrors = require('./catchAsyncErrors');
 //checks id user is authenticated or not 
 exports.isAuthenticatedUser = catchAsyncErrors(async (req, res, next) => {
 
-    //this is authentenicating ht euser on the server side(backend) compared to the client side(frontend) which is a more secure way of authenticating.
+    //this is authentenicating the user on the server side(backend) compared to the client side(frontend) which is a more secure way of authenticating.
     const { token } = req.cookies
 
     if (!token) {
